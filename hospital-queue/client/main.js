@@ -37,11 +37,12 @@ Template.userSide.events({
     }
 });
 
+/*
 Template.hospitalSide.events({
     "click #back": () => {
         FlowRouter.go("/")
     }
-});
+});*/
 
 Template.loginPage.events({
     'submit form': function (event) {

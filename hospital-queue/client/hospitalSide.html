@@ -1,4 +1,118 @@
 <template name = "hospitalSide">
-    <h1>Hospital Side</h1>
-    <button id = "back">Back</button>
+    <div class = "display-wait-list-no">
+        <p>Walk-in</p>
+        <p style="font-size: xx-large">123</p>
+    </div>
+
+    <div class = "display-wait-list-no">
+        <p>Fast Pass</p>
+        <p style="font-size: xx-large">456</p>
+    </div>
+
+    <div class = "display-wait-list-no">
+        <p>Next No.</p>
+        <p style="font-size: xx-large">789</p>
+    </div>
+
+
+
+
+
+    <div style = "clear: both;">
+        <nav>
+            <a href='#walk-in'><span class="label label-primary">Walk-in</span></a>
+            <a href='#fastPass'><span class="label label-warning">Fast Pass</span></a>
+            <a href='#virtualQueue'><span class="label label-danger">Virtual Queue</span></a>
+        </nav>
+
+        <div id='walk-in' class='content'>
+            <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-6"><input type="name" class="form-control" id="nameBox" placeholder="Enter Name">
+                    </div>
+                    <div class="col-xs-4"><button type="register" class="btn btn-default">Register</button></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id='fastPass' class='content'>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                    </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+
+        <div id='virtualQueue' class='content'>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Time Slot</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>14:00 - 15:00</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>14:00 - 15:00</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>15:00 - 16:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+                <div class="container" style="align-content: center">
+                    <div class="row">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-6"><input type="name" class="form-control" id="nameBox" placeholder="Enter Name">
+                        </div>
+                        <div class="col-xs-4"><button type="confirm" class="btn btn-default">Confirm</button></div>
+                    </div>
+                </div>
+            </div>
+    </div>
 </template>

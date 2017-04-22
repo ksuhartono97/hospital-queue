@@ -7,3 +7,45 @@ select {
     font-size: 16px;
     color: #4c4c4c;
 }
+.content {
+    display: none;
+}
+
+.content:target {
+    display: block;
+}
+
+div.display-wait-list-no{
+    float: left;
+    padding-right: 40px;
+}
+
+#walk-in{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border: 5px solid #447AB2 ;
+    background-color: White;
+}
+
+#fastPass{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border: 5px solid #E7AF5F ;
+    background-color: White;
+}
+
+#virtualQueue{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border: 5px solid #CA5C54 ;
+    background-color: White;
+}

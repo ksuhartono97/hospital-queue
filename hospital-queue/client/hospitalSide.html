@@ -15,9 +15,6 @@
     </div>
 
 
-
-
-
     <div style = "clear: both;">
         <nav>
             <a href='#walk-in'><span class="label label-primary">Walk-in</span></a>
@@ -35,27 +32,35 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                </tr>
+                <!--<tr>-->
+                    <!--<th scope="row">1</th>-->
+                    <!--<td>Mark</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th scope="row">2</th>-->
+                    <!--<td>Jacob</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<th scope="row">3</th>-->
+                    <!--<td>Larry</td>-->
+                <!--</tr>-->
+                {{#each offlineQueue}}
+                    <tr>
+                        <td>{{@index}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                {{/each}}
                 </tbody>
             </table>
             </div>
             <div class="container">
                 <div class="row">
                     <div class="col-xs-2"></div>
-                    <div class="col-xs-6"><input type="name" class="form-control" id="nameBox" placeholder="Enter Name">
+                    <div class = "form" id = "offQueueReg">
+                        <div class="col-xs-6"><input type="text" class="form-control" id="nameBox" placeholder="Enter Name">
+                        </div>
+                        <div class="col-xs-4"><input type="submit" class="btn btn-default" value="Register"></div>
                     </div>
-                    <div class="col-xs-4"><button type="register" class="btn btn-default">Register</button></div>
                 </div>
             </div>
 

@@ -1,7 +1,19 @@
 <template name = "userSide">
     <h1>User Side</h1>
-    <button id = "back">Back</button>
-    <button id = "createBooking">Create New Booking</button>
+    <div class = "row">
+        <div class = "col-sm-6">
+            <button id = "back" class="btn btn-default">Back</button>
+        </div>
+        <div class = "col-sm-6">
+            <button id = "createBooking" class="btn btn-default">Create New Booking</button>
+        </div>
+    </div>
+    <div class = "row"><br><br></div>
+    <div class = "row">
+        <div class = "col-sm-12">
+            <button id = "arrivalButton" class="btn btn-primary">ARRIVED AT HOSPITAL</button>
+        </div>
+    </div>
     <div class = "row">
         <div class = "col-sm-12" align = "center">
             <table class = "table table-hover">
@@ -12,7 +24,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{#each bookingArray}}
+                {{#each onlineQueue}}
                     <tr>
                         <td>{{severity}}</td>
                         <td>{{methodOfTransport}}</td>
@@ -23,7 +35,7 @@
         </div>
     </div>
     <div class = "row">
-        <div class = "col-sm-12">
+        <div class = "col-sm-12" align = "center">
             <div class="map-container">
                 {{#unless geolocationError}}
                     {{> googleMap name="exampleMap" options=exampleMapOptions}}

@@ -13,7 +13,7 @@ Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
     // GoogleDistance.key('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
 });
-
+//Depends on type of user.
 var loggedInUserId = null;
 
 Template.loginPage.onCreated(() => {
@@ -59,7 +59,6 @@ Template.userSide.helpers({
         }
     },
     bookingArray : () => {
-        console.log(loggedInUserId)
         const info = UserInfo.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].bookings;
@@ -83,6 +82,39 @@ Template.hospitalSide.onCreated(() => {
     Meteor.subscribe("hospitaldata.all");
 });
 
+Template.hospitalSide.events({
+    "submit form" : function (event) {
+        event.preventDefault();
+        let name = event.target.nameBox.value;
+        console.log(event);
+    }
+});
+
+Template.hospitalSide.helpers({
+    onlineQueue : () => {
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            let result = info[0].online._storage;
+            console.log(result);
+            return result
+        }
+    },
+    offlineQueue: () => {
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            let result = info[0].offline._storage;
+            console.log(result);
+            let result2 = info[0].offline;
+            console.log(result2);
+            let pat1 = new Patient("John", 1, "nada", 300);
+            result2.enqueue(pat1);
+            console.log(result2);
+            HospitalData.update({uid:loggedInUserId}, {$set : {offline: result2}});
+            return result
+        }
+    }
+});
+
 Template.registerPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
@@ -96,14 +128,6 @@ Template.loginPage.events({
 });
 
 
-
-/*
-Template.hospitalSide.events({
-    "click #back": () => {
-        FlowRouter.go("/")
-    }
-});*/
-
 Template.bookingForm.events({
    "submit form" : function (event) {
        event.preventDefault();
@@ -111,7 +135,6 @@ Template.bookingForm.events({
        let methodOfTransport = event.target.methodOfTransport.value;
        let newBooking = {severity:severity, methodOfTransport:methodOfTransport};
        Meteor.call('userInfo.addBookingData', loggedInUserId, newBooking);
-       console.log(loggedInUserId);
        FlowRouter.go("/userside");
    }
 });
@@ -142,7 +165,7 @@ Template.loginPage.events({
             }
         });
     }
-})
+});
 
 Template.registerPage.events({
     'submit form': function (event) {
@@ -171,10 +194,10 @@ Template.registerPage.events({
 
 
 /// patient object
-function Patient(first, last, idNum, arrivalTime) {
-    this.firstName = first;
-    this.lastName = last;
-    this.idNum = idNum;
+function Patient(name, id, bookingDets, arrivalTime) {
+    this.name = name;
+    this.id = id;
+    this.bookingDetails = bookingDets;
     this.arrivalTime = arrivalTime;
 };
 

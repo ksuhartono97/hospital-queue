@@ -1,12 +1,33 @@
 import {Template} from 'meteor/templating';
 import {ReactiveVar} from 'meteor/reactive-var';
+import { GoogleMaps } from 'meteor/dburles:google-maps';
 
 import './main.html';
 import './userSide.html';
 import './hospitalSide.html';
 
+Meteor.startup(function() {
+    GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
+});
+
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
+    GoogleMaps.ready('exampleMap', function(map) {
+        console.log("I'm ready!");
+    });
+});
+
+Template.loginPage.helpers({
+    exampleMapOptions: function() {
+        // Make sure the maps API has loaded
+        if (GoogleMaps.loaded()) {
+            // Map initialization options
+            return {
+                center: new google.maps.LatLng(-37.8136, 144.9631),
+                zoom: 8
+            };
+        }
+    }
 });
 
 Template.userSide.onCreated(() => {

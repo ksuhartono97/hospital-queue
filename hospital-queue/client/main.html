@@ -53,7 +53,11 @@
   <div class = "row">
     <div class = "col-sm-12">
       <div class="map-container">
-        {{> googleMap name="exampleMap" options=exampleMapOptions}}
+         {{#unless geolocationError}}
+      		{{> googleMap name="exampleMap" options=exampleMapOptions}}
+    	{{else}}
+      		Geolocation failed: {{geolocationError}}
+    	{{/unless}}
       </div>
     </div>
   </div>

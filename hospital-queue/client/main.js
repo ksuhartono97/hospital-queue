@@ -5,6 +5,7 @@ import { GoogleMaps } from 'meteor/dburles:google-maps';
 import './main.html';
 import './userSide.html';
 import './hospitalSide.html';
+var MAP_ZOOM = 15;
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
@@ -13,18 +14,28 @@ Meteor.startup(function() {
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
     GoogleMaps.ready('exampleMap', function(map) {
-        console.log("I'm ready!");
+	 var latLng = Geolocation.latLng();
+     	 var marker = new google.maps.Marker({
+     	 	position: new google.maps.LatLng(latLng.lat, latLng.lng),
+     	 	map: map.instance
+    	 });
     });
 });
 
 Template.loginPage.helpers({
+  geolocationError: function() {
+    var error = Geolocation.error();
+    return error && error.message;
+  },
     exampleMapOptions: function() {
-        // Make sure the maps API has loaded
-        if (GoogleMaps.loaded()) {
+        var latLng = Geolocation.latLng();
+    // Initialize the map once we have the latLng.
+	// Make sure the maps API has loaded
+        if (GoogleMaps.loaded() && latLng) {
             // Map initialization options
             return {
-                center: new google.maps.LatLng(-37.8136, 144.9631),
-                zoom: 8
+                center: new google.maps.LatLng(latLng.lat, latLng.lng),
+        	zoom: MAP_ZOOM
             };
         }
     }

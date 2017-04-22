@@ -1,4 +1,16 @@
 <template name = "userSide">
     <h1>User Side</h1>
     <button id = "back">Back</button>
+    
+    <div class = "row">
+        <div class = "col-sm-12">
+            <div class="map-container">
+                {{#unless geolocationError}}
+                    {{> googleMap name="exampleMap" options=exampleMapOptions}}
+                {{else}}
+                    Geolocation failed: {{geolocationError}}
+                {{/unless}}
+            </div>
+        </div>
+    </div>
 </template>

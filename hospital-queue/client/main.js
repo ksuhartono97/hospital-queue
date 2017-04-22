@@ -1,6 +1,7 @@
 import {Template} from 'meteor/templating';
 import {ReactiveVar} from 'meteor/reactive-var';
 import { GoogleMaps } from 'meteor/dburles:google-maps';
+import { GoogleDistance } from 'meteor/andrei:google-distance';
 
 import './main.html';
 import './userSide.html';
@@ -9,41 +10,51 @@ var MAP_ZOOM = 15;
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
+    // GoogleDistance.key('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
 });
 
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
-    GoogleMaps.ready('exampleMap', function(map) {
-	 var latLng = Geolocation.latLng();
-     	 var marker = new google.maps.Marker({
-     	 	position: new google.maps.LatLng(latLng.lat, latLng.lng),
-     	 	map: map.instance
-    	 });
-    });
-});
-
-Template.loginPage.helpers({
-  geolocationError: function() {
-    var error = Geolocation.error();
-    return error && error.message;
-  },
-    exampleMapOptions: function() {
-        var latLng = Geolocation.latLng();
-    // Initialize the map once we have the latLng.
-	// Make sure the maps API has loaded
-        if (GoogleMaps.loaded() && latLng) {
-            // Map initialization options
-            return {
-                center: new google.maps.LatLng(latLng.lat, latLng.lng),
-        	zoom: MAP_ZOOM
-            };
-        }
-    }
+    GoogleDistance.get(
+        {
+            origin: 'San Francisco, CA',
+            destination: 'San Diego, CA'
+        },
+        function(err, data) {
+            if (err) return console.log(err);
+            console.log(data.durationValue);
+        });
 });
 
 Template.userSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
+    GoogleMaps.ready('exampleMap', function(map) {
+        var latLng = Geolocation.latLng();
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(latLng.lat, latLng.lng),
+            map: map.instance
+        });
+    });
+});
+
+Template.userSide.helpers({
+    geolocationError: function() {
+        var error = Geolocation.error();
+        return error && error.message;
+    },
+    exampleMapOptions: function() {
+        var latLng = Geolocation.latLng();
+        // Initialize the map once we have the latLng.
+        // Make sure the maps API has loaded
+        if (GoogleMaps.loaded() && latLng) {
+            // Map initialization options
+            return {
+                center: new google.maps.LatLng(latLng.lat, latLng.lng),
+                zoom: MAP_ZOOM
+            };
+        }
+    }
 });
 
 Template.hospitalSide.onCreated(() => {

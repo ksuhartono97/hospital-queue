@@ -22,3 +22,5 @@ kadira:flow-router
 twbs:bootstrap
 kadira:blaze-layout
 dburles:google-maps
+mdg:geolocation
+andrei:google-distance

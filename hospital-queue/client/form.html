@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script>
+function upload() {
+    //document.getElementById("demo").innerHTML = "Hello World";
+}
+
+function getOptions() {
+    var x = document.getElementById("mySelect");
+    var txt = "";
+    var i;
+    for (i = 0; i < x.length; i++) {
+        txt = txt + " " + x.options[i].text;
+    }
+    document.getElementById("demo").innerHTML = txt;
+}
+</script>
+    <title>
+     Booking form
+    </title>
+  </head>
+  <body>
+    <h1> Booking form </h1>
+    <form>
+Select the most severe level of discomfort that you are facing:
+<select id="mySelect">
+  <option>Breathing difficulty</option>
+  <option>Dislocation or bone fracture</option>
+  <option>Large severe burnt areas</option>
+  <option>Sprains</option>
+  <option>Small areas of severe burn</option>
+  <option>None of the above</option>
+</select>
+     
+<br><br>
+<button onclick="myFunction()">Submit</button>
+</form>
+    <br><br><br><br>
+    <form>
+Select your means of transport:
+<select id="mySelect">
+  <option>On foot</option>
+  <option>Public Transport</option>
+  <option>Private Transport</option>
+</select>
+<br><br>
+
+<button onclick="myFunction()">Submit</button>
+</form>
+    
+  </body>
+</html>

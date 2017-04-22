@@ -4,4 +4,8 @@
 
 Meteor.publish("userdata.all", () => {
     return UserData.find();
-})
+});
+
+Meteor.publish("userinfo.all", () => {
+    return UserInfo.find();
+});

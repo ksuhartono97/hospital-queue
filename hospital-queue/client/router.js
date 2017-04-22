@@ -15,3 +15,9 @@ FlowRouter.route("/hospitalside", {
         BlazeLayout.render("mainLayout", {mainContent: "hospitalSide"})
     }
 });
+
+FlowRouter.route("/register", {
+    action: ()=> {
+        BlazeLayout.render("mainLayout", {mainContent: "registerPage"})
+    }
+});

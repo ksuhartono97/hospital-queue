@@ -9,3 +9,7 @@ Meteor.publish("userdata.all", () => {
 Meteor.publish("userinfo.all", () => {
     return UserInfo.find();
 });
+
+Meteor.publish("hospitaldata.all", () => {
+    return HospitalData.find();
+});

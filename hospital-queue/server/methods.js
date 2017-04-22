@@ -10,13 +10,19 @@ Meteor.methods({
         return UserData.find({type:"user", email:email, password:password}).fetch()
     },
     'wipeUserData' : () => {
-        UserData.remove({type: "user", group:"general"})
+        UserData.remove({type: "user"})
     },
     'userInfo.create' : (udataref)=> {
         UserInfo.insert({type:"info", uid: udataref})
     },
     'wipeUserInfo' : () => {
         UserInfo.remove({type:"info"})
+    },
+    'hospitalData.create' : (udataref, onQueue, offQueue) => {
+        HospitalData.insert({type:"hosp", uid: udataref, online: onQueue, offline: offQueue})
+    },
+    'wipeHospitalData' : () => {
+        HospitalData.remove({type:"hosp"})
     }
 
 });

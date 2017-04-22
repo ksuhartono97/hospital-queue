@@ -1,5 +1,5 @@
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+import {Template} from 'meteor/templating';
+import {ReactiveVar} from 'meteor/reactive-var';
 
 import './main.html';
 import './userSide.html';
@@ -7,17 +7,22 @@ import './hospitalSide.html';
 
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
-    Meteor.subscribe("userinfo.all");
 });
 
-Template.userSide.onCreated(()=> {
-   Meteor.subscribe("userdata.all");
-   Meteor.subscribe("userinfo.all");
-});
-
-Template.registerPage.onCreated(()=> {
+Template.userSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
+});
+
+Template.hospitalSide.onCreated(() => {
+    Meteor.subscribe("userdata.all");
+    Meteor.subscribe("hospitaldata.all");
+});
+
+Template.registerPage.onCreated(() => {
+    Meteor.subscribe("userdata.all");
+    Meteor.subscribe("userinfo.all");
+    Meteor.subscribe("hospitaldata.all");
 });
 
 Template.loginPage.events({
@@ -39,18 +44,18 @@ Template.hospitalSide.events({
 });
 
 Template.loginPage.events({
-    'submit form': function(event) {
+    'submit form': function (event) {
         event.preventDefault();
         let emailVar = event.target.loginEmail.value;
         let passwordVar = event.target.loginPassword.value;
 
-        Meteor.call("userData.login", emailVar, passwordVar, function(error, result) {
-            if(error) {
+        Meteor.call("userData.login", emailVar, passwordVar, function (error, result) {
+            if (error) {
                 alert("Failed to login, check your credentials")
             }
-            if(result.length > 0) {
-                if(result[0].group == "hospital") FlowRouter.go("/hospitalside");
-                else if(result[0].group == "general") FlowRouter.go("/userside");
+            if (result.length > 0) {
+                if (result[0].group == "hospital") FlowRouter.go("/hospitalside");
+                else if (result[0].group == "general") FlowRouter.go("/userside");
                 else alert("ERROR, CONTACT ADMIN")
             }
             else {
@@ -61,18 +66,87 @@ Template.loginPage.events({
 })
 
 Template.registerPage.events({
-    'submit form': function(event) {
+    'submit form': function (event) {
         event.preventDefault();
         let emailVar = event.target.loginEmail.value;
         let passwordVar = event.target.loginPassword.value;
         let name = event.target.namefield.value;
+        let radio = event.target.radio1.value;
+        if (radio == 1) { //Hospital
+            let lineOnline = new Queue();
+            let lineOffline = new Queue();
+            Meteor.call("userData.insert", emailVar, name, passwordVar, "hospital", function (error, result) {
+                Meteor.call("hospitalData.create", result, lineOnline, lineOffline);
+            });
 
-        Meteor.call("userData.insert", emailVar, name, passwordVar, "general", function(error, result) {
-            console.log(result);
-            Meteor.call("userInfo.create", UserData.find({"_id" : result}).fetch()[0]._id);
-        });
+        }
+        else if (radio == 0) { //Client
+            Meteor.call("userData.insert", emailVar, name, passwordVar, "general", function (error, result) {
+                Meteor.call("userInfo.create", result);
+            });
+        }
 
-        console.log("Form submitted.");
         FlowRouter.go("/")
     }
 });
+
+
+/// patient object
+function Patient(first, last, idNum, arrivalTime) {
+    this.firstName = first;
+    this.lastName = last;
+    this.idNum = idNum;
+    this.arrivalTime = arrivalTime;
+};
+
+///// queue object
+function Queue() {
+    this._oldestIndex = 1;
+    this._newestIndex = 1;
+    this._storage = [];
+    this._last = false;
+}
+
+// size
+Queue.prototype.size = function () {
+    return this._newestIndex - this._oldestIndex;
+};
+
+//enqueue
+Queue.prototype.enqueue = function (data) {
+    this._storage[this._newestIndex] = data;
+    this._newestIndex++;
+};
+
+// dequeue
+Queue.prototype.dequeue = function () {
+    var oldestIndex = this._oldestIndex,
+        newestIndex = this._newestIndex,
+        deletedData;
+    if (oldestIndex !== newestIndex) {
+        deletedData = this._storage[oldestIndex];
+        delete this._storage[oldestIndex];
+        this._oldestIndex++;
+        this._last = true;/// last time unit lastest user is dequeued
+        console.log(this._last);
+        return deletedData;
+    }
+};
+
+//move the patient
+function move(lineOffline, lineOnline) {
+    // online patient arrive
+    if (lineOffline._last) {
+        if (lineOnline._storage[lineOnline._oldestIndex].arrivalTime
+            <= lineOffline._storage[lineOffline._oldestIndex].arrivalTime) {
+            var a = lineOnline.dequeue();
+        }
+        else {
+            var a = lineOffline.dequeue();
+        }
+    }
+    else {
+        var a = lineOffline.dequeue();
+    }
+    return a;
+}

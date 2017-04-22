@@ -1,7 +1,27 @@
 <template name = "userSide">
     <h1>User Side</h1>
     <button id = "back">Back</button>
-    
+    <button id = "createBooking">Create New Booking</button>
+    <div class = "row">
+        <div class = "col-sm-12" align = "center">
+            <table class = "table table-hover">
+                <thead>
+                <tr>
+                    <td>Severity</td>
+                    <td>Method Of Transport</td>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each bookingArray}}
+                    <tr>
+                        <td>{{severity}}</td>
+                        <td>{{methodOfTransport}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class = "row">
         <div class = "col-sm-12">
             <div class="map-container">

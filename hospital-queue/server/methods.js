@@ -13,7 +13,15 @@ Meteor.methods({
         UserData.remove({type: "user"})
     },
     'userInfo.create' : (udataref)=> {
-        UserInfo.insert({type:"info", uid: udataref})
+        UserInfo.insert({type:"info", uid: udataref, bookings: []})
+    },
+    'userInfo.query' : (uid) => {
+        return UserInfo.find({uid:uid}).fetch();
+    },
+    'userInfo.addBookingData' : (uid, newData) => {
+        let temp = UserInfo.find({uid:uid}).fetch()[0].bookings;
+        temp.push(newData);
+        UserInfo.update({uid:uid}, {$set : {bookings: temp}})
     },
     'wipeUserInfo' : () => {
         UserInfo.remove({type:"info"})

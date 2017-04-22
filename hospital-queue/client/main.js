@@ -6,12 +6,15 @@ import { GoogleDistance } from 'meteor/andrei:google-distance';
 import './main.html';
 import './userSide.html';
 import './hospitalSide.html';
+import './form.html';
 var MAP_ZOOM = 15;
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
     // GoogleDistance.key('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
 });
+
+var loggedInUserId = null;
 
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
@@ -54,6 +57,24 @@ Template.userSide.helpers({
                 zoom: MAP_ZOOM
             };
         }
+    },
+    bookingArray : () => {
+        console.log(loggedInUserId)
+        const info = UserInfo.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            let result = info[0].bookings;
+            console.log(result);
+            return result
+        }
+    }
+});
+
+Template.userSide.events({
+    "click #back": () => {
+        FlowRouter.go("/")
+    },
+    "click #createBooking": () => {
+        FlowRouter.go("/userside/booking")
     }
 });
 
@@ -74,11 +95,7 @@ Template.loginPage.events({
     }
 });
 
-Template.userSide.events({
-    "click #back": () => {
-        FlowRouter.go("/")
-    }
-});
+
 
 /*
 Template.hospitalSide.events({
@@ -86,6 +103,18 @@ Template.hospitalSide.events({
         FlowRouter.go("/")
     }
 });*/
+
+Template.bookingForm.events({
+   "submit form" : function (event) {
+       event.preventDefault();
+       let severity = event.target.severity.value;
+       let methodOfTransport = event.target.methodOfTransport.value;
+       let newBooking = {severity:severity, methodOfTransport:methodOfTransport};
+       Meteor.call('userInfo.addBookingData', loggedInUserId, newBooking);
+       console.log(loggedInUserId);
+       FlowRouter.go("/userside");
+   }
+});
 
 Template.loginPage.events({
     'submit form': function (event) {
@@ -98,8 +127,14 @@ Template.loginPage.events({
                 alert("Failed to login, check your credentials")
             }
             if (result.length > 0) {
-                if (result[0].group == "hospital") FlowRouter.go("/hospitalside");
-                else if (result[0].group == "general") FlowRouter.go("/userside");
+                if (result[0].group == "hospital") {
+                    loggedInUserId = result[0]._id;
+                    FlowRouter.go("/hospitalside");
+                }
+                else if (result[0].group == "general"){
+                    loggedInUserId = result[0]._id;
+                    FlowRouter.go("/userside");
+                }
                 else alert("ERROR, CONTACT ADMIN")
             }
             else {

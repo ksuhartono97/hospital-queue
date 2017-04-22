@@ -21,3 +21,9 @@ FlowRouter.route("/register", {
         BlazeLayout.render("mainLayout", {mainContent: "registerPage"})
     }
 });
+
+FlowRouter.route("/userside/booking", {
+   action: ()=> {
+       BlazeLayout.render("mainLayout", {mainContent: "bookingForm"})
+   }
+});

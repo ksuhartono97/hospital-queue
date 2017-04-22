@@ -1,0 +1,47 @@
+<template name = "bookingForm">
+    <div class = "row">
+        <div class = "col-sm-12">
+            <h1> Booking form </h1>
+        </div>
+    </div>
+    <form>
+        <div class = "row">
+            <div class = "col-sm-12">
+                Select the most severe level of discomfort that you are facing:
+            </div>
+        </div>
+        <div class = "row">
+            <div class = "col-sm-12">
+                <select id="severity">
+                    <option>Breathing difficulty</option>
+                    <option>Dislocation or bone fracture</option>
+                    <option>Large severe burnt areas</option>
+                    <option>Sprains</option>
+                    <option>Small areas of severe burn</option>
+                    <option>None of the above</option>
+                </select>
+            </div>
+        </div>
+        <div class = "row">
+            <div class = "col-sm-12">
+                Select your means of transport:
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-sm-12">
+                <select id="methodOfTransport">
+                    <option>On foot</option>
+                    <option>Public Transport</option>
+                    <option>Private Transport</option>
+                </select>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class = "col-sm-12">
+                <button id = "submitBooking">Submit</button>
+            </div>
+        </div>
+    </form>
+</template>

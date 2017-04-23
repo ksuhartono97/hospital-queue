@@ -105,6 +105,27 @@ Template.hospitalSide.events({
             Meteor.call('hospitalData.updateOffline', loggedInUserId, newQueue);
             return result
         }
+    },
+    "submit #onQueueReg" : function (event) {
+        event.preventDefault();
+        let name = event.target.nameBox.value;
+        console.log(name);
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            console.log(info);
+            let result = info[0].online._storage;
+            console.log(result);
+            let result2 = info[0].online;
+            let newQueue = new Queue();
+            newQueue._oldestIndex = result2._oldestIndex;
+            newQueue._newestIndex = result2._newestIndex;
+            newQueue._storage = result2._storage;
+            newQueue._last = result2._last;
+            let newPerson = new Patient(name, Math.random(), "stuff", Math.random());
+            newQueue.enqueue(newPerson);
+            Meteor.call('hospitalData.updateOnline', loggedInUserId, newQueue);
+            return result
+        }
     }
 });
 

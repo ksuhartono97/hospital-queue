@@ -32,22 +32,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--<tr>-->
-                    <!--<th scope="row">1</th>-->
-                    <!--<td>Mark</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<th scope="row">2</th>-->
-                    <!--<td>Jacob</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<th scope="row">3</th>-->
-                    <!--<td>Larry</td>-->
-                <!--</tr>-->
                 {{#each offlineQueue}}
                     <tr>
                         <td>{{@index}}</td>
-                        <td>{{this}}</td>
+                        <td>{{this.name}}</td>
                     </tr>
                 {{/each}}
                 </tbody>
@@ -75,7 +63,14 @@
                         <th>Name</th>
                     </tr>
                     </thead>
-
+                    <tbody>
+                    {{#each onlineQueue}}
+                        <tr>
+                            <td>{{@index}}</td>
+                            <td>{{this.name}}</td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
                 </table>
             </div>
         </div>

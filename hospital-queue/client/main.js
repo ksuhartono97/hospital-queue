@@ -106,12 +106,14 @@ Template.hospitalSide.helpers({
         if (info.length > 0) {
             let result = info[0].offline._storage;
             console.log(result);
-            let result2 = info[0].offline;
-            console.log(result2);
-            let pat1 = new Patient("John", 1, "nada", 300);
-            result2.enqueue(pat1);
-            console.log(result2);
-            HospitalData.update({uid:loggedInUserId}, {$set : {offline: result2}});
+            // let result2 = info[0].offline;
+            // let newQueue = new Queue();
+            // newQueue._oldestIndex = result2._oldestIndex;
+            // newQueue._newestIndex = result2._newestIndex;
+            // newQueue._storage = result2._storage;
+            // newQueue._last = result2._last;
+            // console.log(newQueue);
+            // Meteor.call('hospitalData.updateOffline', loggedInUserId, newQueue);
             return result
         }
     }
@@ -179,6 +181,7 @@ Template.registerPage.events({
         if (radio == 1) { //Hospital
             let lineOnline = new Queue();
             let lineOffline = new Queue();
+            console.log(lineOffline);
             Meteor.call("userData.insert", emailVar, name, passwordVar, "hospital", function (error, result) {
                 Meteor.call("hospitalData.create", result, lineOnline, lineOffline);
             });

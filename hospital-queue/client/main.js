@@ -11,32 +11,34 @@ var MAP_ZOOM = 15;
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
-    // GoogleDistance.key('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
+    //GoogleDistance.apiKey('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
 });
 //Depends on type of user.
 var loggedInUserId = null;
+var latLng = null;
 
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
-    GoogleDistance.get(
-        {
-            origin: 'San Francisco, CA',
-            destination: 'San Diego, CA'
-        },
-        function(err, data) {
-            if (err) return console.log(err);
-            console.log(data.durationValue);
-        });
 });
 
 Template.userSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
     GoogleMaps.ready('exampleMap', function(map) {
-        var latLng = Geolocation.latLng();
+        latLng = Geolocation.latLng();
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(latLng.lat, latLng.lng),
             map: map.instance
+        });
+        GoogleDistance.get(
+        {
+            origin: latLng.lat+','+latLng.lng,
+            destinations: ['2 Po Ning Ln, Tseung Kwan O', '130 Hip Wo St, Kwun Tong', '118 Shatin Pass Rd, Chuk Un']
+        },
+        function(err, data) {
+            if (err) return console.log(err);
+            // to get the data data[0].durationValue
+            console.log(data[0].durationValue);
         });
     });
 });

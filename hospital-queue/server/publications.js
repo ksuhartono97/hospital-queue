@@ -13,3 +13,6 @@ Meteor.publish("userinfo.all", () => {
 Meteor.publish("hospitaldata.all", () => {
     return HospitalData.find();
 });
+Meteor.publish("virtualqueue.all", () => {
+    return VirtualQueue.find();
+});

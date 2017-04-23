@@ -33,12 +33,22 @@ Meteor.methods({
         HospitalData.remove({type:"hosp"})
     },
     'hospitalData.updateOffline' : (udataref, offQueue) => {
-        doc_id = HospitalData.findOne({uid:udataref})._id;
+        let doc_id = HospitalData.findOne({uid:udataref})._id;
         HospitalData.update({_id:doc_id}, {$set : {offline: offQueue}});
     },
     'hospitalData.updateOnline' : (udataref, onQueue) => {
-        doc_id = HospitalData.findOne({uid:udataref})._id;
+        let doc_id = HospitalData.findOne({uid:udataref})._id;
         HospitalData.update({_id:doc_id}, {$set : {online: onQueue}});
+    },
+    'virtualQueue.insert' : (udataref, name, timeslot) => {
+        VirtualQueue.insert({type:"person", name:name, timeslot:timeslot});
+    },
+    'virtualQueue.wipe' : () => {
+        VirtualQueue.remove({type:"person"})
+    },
+    'virtualQueue.removeOne' : (name) => {
+       let doc_id = VirtualQueue.findOne({name:name})._id;
+       console.log(doc_id);
+       VirtualQueue.remove({_id:doc_id})
     }
-
 });

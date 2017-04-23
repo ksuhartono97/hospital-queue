@@ -24,6 +24,7 @@ Template.loginPage.onCreated(() => {
 Template.userSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
+    Meteor.subscribe("virtualqueue.all");
     GoogleMaps.ready('exampleMap', function(map) {
         latLng = Geolocation.latLng();
         var marker = new google.maps.Marker({
@@ -76,24 +77,29 @@ Template.userSide.events({
     },
     "click #createBooking": () => {
         FlowRouter.go("/userside/booking")
+    },
+    "click #arrivalButton" : () => {
+    const name = UserData.findOne({_id:loggedInUserId}).username;
+    if(name.length > 0) {
+        Meteor.call('virtualQueue.insert', loggedInUserId, name, "19.00-20.00");
     }
+
+}
 });
 
 Template.hospitalSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("hospitaldata.all");
+    Meteor.subscribe("virtualqueue.all");
 });
 
 Template.hospitalSide.events({
     "submit #offQueueReg" : function (event) {
         event.preventDefault();
         let name = event.target.nameBox.value;
-        console.log(name);
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
-            console.log(info);
             let result = info[0].offline._storage;
-            console.log(result);
             let result2 = info[0].offline;
             let newQueue = new Queue();
             newQueue._oldestIndex = result2._oldestIndex;
@@ -109,12 +115,10 @@ Template.hospitalSide.events({
     "submit #onQueueReg" : function (event) {
         event.preventDefault();
         let name = event.target.nameBox.value;
-        console.log(name);
+        Meteor.call('virtualQueue.removeOne', name);
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
-            console.log(info);
             let result = info[0].online._storage;
-            console.log(result);
             let result2 = info[0].online;
             let newQueue = new Queue();
             newQueue._oldestIndex = result2._oldestIndex;
@@ -134,7 +138,6 @@ Template.hospitalSide.helpers({
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].online._storage;
-            console.log(result);
             return result
         }
     },
@@ -142,17 +145,11 @@ Template.hospitalSide.helpers({
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].offline._storage;
-            console.log(result);
-            // let result2 = info[0].offline;
-            // let newQueue = new Queue();
-            // newQueue._oldestIndex = result2._oldestIndex;
-            // newQueue._newestIndex = result2._newestIndex;
-            // newQueue._storage = result2._storage;
-            // newQueue._last = result2._last;
-            // console.log(newQueue);
-            // Meteor.call('hospitalData.updateOffline', loggedInUserId, newQueue);
             return result
         }
+    },
+    virtualQueue: () => {
+        return VirtualQueue.find().fetch();
     }
 });
 

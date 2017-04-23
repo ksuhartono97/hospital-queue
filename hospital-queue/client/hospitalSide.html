@@ -1,21 +1,21 @@
 <template name = "hospitalSide">
     <div class = "display-wait-list-no">
         <p>Walk-in</p>
-        <p style="font-size: xx-large">123</p>
+        <p style="font-size: xx-large">{{showWalkinNum}}</p>
     </div>
 
     <div class = "display-wait-list-no">
         <p>Fast Pass</p>
-        <p style="font-size: xx-large">456</p>
+        <p style="font-size: xx-large">{{showFastPassNum}}</p>
     </div>
 
     <div class = "display-wait-list-no">
         <p>Next No.</p>
-        <p style="font-size: xx-large">789</p>
+        <p style="font-size: xx-large">{{showVirtualNum}}</p>
     </div>
 
     <div class = "display-wait-list-no">
-        <button class="btn btn-default" onclick="move(lineOffline, lineOnline)">Move the Queue</button>
+        <button class="btn btn-default" id = "queueMove">Move the Queue</button>
     </div>
 
 

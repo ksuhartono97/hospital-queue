@@ -2,12 +2,17 @@ import {Template} from 'meteor/templating';
 import {ReactiveVar} from 'meteor/reactive-var';
 import { GoogleMaps } from 'meteor/dburles:google-maps';
 import { GoogleDistance } from 'meteor/andrei:google-distance';
+import {Session} from 'meteor/session'
 
 import './main.html';
 import './userSide.html';
 import './hospitalSide.html';
 import './form.html';
 var MAP_ZOOM = 15;
+
+var fastpassNum = new ReactiveVar(0);
+var virtualNum = new ReactiveVar(0);
+var walkinNum= new ReactiveVar(0);
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
@@ -130,6 +135,27 @@ Template.hospitalSide.events({
             Meteor.call('hospitalData.updateOnline', loggedInUserId, newQueue);
             return result
         }
+    },
+    "click #queueMove" : () => {
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        console.log(info[0].online);
+            if (info.length>0) {
+                let result = info[0].online;
+                let onQueue = new Queue();
+                onQueue._oldestIndex = result._oldestIndex;
+                onQueue._newestIndex = result._newestIndex;
+                onQueue._storage = result._storage;
+                onQueue._last = result._last;
+                let result2 = info[0].offline;
+                let offQueue = new Queue();
+                offQueue._oldestIndex = result2._oldestIndex;
+                offQueue._newestIndex = result2._newestIndex;
+                offQueue._storage = result2._storage;
+                offQueue._last = result2._last;
+                move(offQueue, onQueue);
+                Meteor.call('hospitalData.updateOffline', loggedInUserId, offQueue);
+                Meteor.call('hospitalData.updateOnline', loggedInUserId, onQueue);
+            }
     }
 });
 
@@ -138,6 +164,8 @@ Template.hospitalSide.helpers({
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].online._storage;
+            console.log(result.length);
+            Session.set("fastpassNum", result.length);
             return result
         }
     },
@@ -145,11 +173,23 @@ Template.hospitalSide.helpers({
         const info = HospitalData.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].offline._storage;
+            Session.set("walkinNum", result.length);
             return result
         }
     },
     virtualQueue: () => {
-        return VirtualQueue.find().fetch();
+        let result = VirtualQueue.find().fetch();
+        Session.set("virtualNum", result.length);
+        return result
+    },
+    showFastPassNum: () => {
+        return getFastpassNum();
+    },
+    showVirtualNum: () => {
+        return getVirtualNum();
+    },
+    showWalkinNum: ()=> {
+        return getWalkinNum();
     }
 });
 
@@ -242,8 +282,8 @@ function Patient(name, id, bookingDets, arrivalTime) {
 
 ///// queue object
 function Queue() {
-    this._oldestIndex = 1;
-    this._newestIndex = 1;
+    this._oldestIndex = 0;
+    this._newestIndex = 0;
     this._storage = [];
     this._last = false;
 }
@@ -266,7 +306,7 @@ Queue.prototype.dequeue = function () {
         deletedData;
     if (oldestIndex !== newestIndex) {
         deletedData = this._storage[oldestIndex];
-        delete this._storage[oldestIndex];
+        this._storage.shift();
         this._oldestIndex++;
         this._last = true;/// last time unit lastest user is dequeued
         console.log(this._last);
@@ -291,3 +331,15 @@ function move(lineOffline, lineOnline) {
     }
     return a;
 }
+
+var getFastpassNum = function () {
+    return Session.get('fastpassNum');
+};
+
+var getVirtualNum = () => {
+    return Session.get('virtualNum');
+};
+
+var getWalkinNum = () => {
+    return Session.get('walkinNum');
+};

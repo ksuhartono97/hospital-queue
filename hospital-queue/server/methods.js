@@ -31,6 +31,14 @@ Meteor.methods({
     },
     'wipeHospitalData' : () => {
         HospitalData.remove({type:"hosp"})
+    },
+    'hospitalData.updateOffline' : (udataref, offQueue) => {
+        doc_id = HospitalData.findOne({uid:udataref})._id;
+        HospitalData.update({_id:doc_id}, {$set : {offline: offQueue}});
+    },
+    'hospitalData.updateOnline' : (udataref, onQueue) => {
+        doc_id = HospitalData.findOne({uid:udataref})._id;
+        HospitalData.update({_id:doc_id}, {$set : {online: onQueue}});
     }
 
 });

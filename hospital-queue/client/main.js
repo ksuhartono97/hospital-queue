@@ -11,32 +11,34 @@ var MAP_ZOOM = 15;
 
 Meteor.startup(function() {
     GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
-    // GoogleDistance.key('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
+    //GoogleDistance.apiKey('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
 });
-
+//Depends on type of user.
 var loggedInUserId = null;
+var latLng = null;
 
 Template.loginPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
-    GoogleDistance.get(
-        {
-            origin: 'San Francisco, CA',
-            destination: 'San Diego, CA'
-        },
-        function(err, data) {
-            if (err) return console.log(err);
-            console.log(data.durationValue);
-        });
 });
 
 Template.userSide.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
     GoogleMaps.ready('exampleMap', function(map) {
-        var latLng = Geolocation.latLng();
+        latLng = Geolocation.latLng();
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(latLng.lat, latLng.lng),
             map: map.instance
+        });
+        GoogleDistance.get(
+        {
+            origin: latLng.lat+','+latLng.lng,
+            destinations: ['2 Po Ning Ln, Tseung Kwan O', '130 Hip Wo St, Kwun Tong', '118 Shatin Pass Rd, Chuk Un']
+        },
+        function(err, data) {
+            if (err) return console.log(err);
+            // to get the data data[0].durationValue
+            console.log(data[0].durationValue);
         });
     });
 });
@@ -59,7 +61,6 @@ Template.userSide.helpers({
         }
     },
     bookingArray : () => {
-        console.log(loggedInUserId)
         const info = UserInfo.find({uid:loggedInUserId}).fetch();
         if (info.length > 0) {
             let result = info[0].bookings;
@@ -83,6 +84,78 @@ Template.hospitalSide.onCreated(() => {
     Meteor.subscribe("hospitaldata.all");
 });
 
+Template.hospitalSide.events({
+    "submit #offQueueReg" : function (event) {
+        event.preventDefault();
+        let name = event.target.nameBox.value;
+        console.log(name);
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            console.log(info);
+            let result = info[0].offline._storage;
+            console.log(result);
+            let result2 = info[0].offline;
+            let newQueue = new Queue();
+            newQueue._oldestIndex = result2._oldestIndex;
+            newQueue._newestIndex = result2._newestIndex;
+            newQueue._storage = result2._storage;
+            newQueue._last = result2._last;
+            let newPerson = new Patient(name, Math.random(), "stuff", Math.random());
+            newQueue.enqueue(newPerson);
+            Meteor.call('hospitalData.updateOffline', loggedInUserId, newQueue);
+            return result
+        }
+    },
+    "submit #onQueueReg" : function (event) {
+        event.preventDefault();
+        let name = event.target.nameBox.value;
+        console.log(name);
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            console.log(info);
+            let result = info[0].online._storage;
+            console.log(result);
+            let result2 = info[0].online;
+            let newQueue = new Queue();
+            newQueue._oldestIndex = result2._oldestIndex;
+            newQueue._newestIndex = result2._newestIndex;
+            newQueue._storage = result2._storage;
+            newQueue._last = result2._last;
+            let newPerson = new Patient(name, Math.random(), "stuff", Math.random());
+            newQueue.enqueue(newPerson);
+            Meteor.call('hospitalData.updateOnline', loggedInUserId, newQueue);
+            return result
+        }
+    }
+});
+
+Template.hospitalSide.helpers({
+    onlineQueue : () => {
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            let result = info[0].online._storage;
+            console.log(result);
+            return result
+        }
+    },
+    offlineQueue: () => {
+        const info = HospitalData.find({uid:loggedInUserId}).fetch();
+        if (info.length > 0) {
+            let result = info[0].offline._storage;
+            console.log(result);
+            // let result2 = info[0].offline;
+            // let newQueue = new Queue();
+            // newQueue._oldestIndex = result2._oldestIndex;
+            // newQueue._newestIndex = result2._newestIndex;
+            // newQueue._storage = result2._storage;
+            // newQueue._last = result2._last;
+            // console.log(newQueue);
+            // Meteor.call('hospitalData.updateOffline', loggedInUserId, newQueue);
+            return result
+        }
+    }
+});
+
 Template.registerPage.onCreated(() => {
     Meteor.subscribe("userdata.all");
     Meteor.subscribe("userinfo.all");
@@ -96,14 +169,6 @@ Template.loginPage.events({
 });
 
 
-
-/*
-Template.hospitalSide.events({
-    "click #back": () => {
-        FlowRouter.go("/")
-    }
-});*/
-
 Template.bookingForm.events({
    "submit form" : function (event) {
        event.preventDefault();
@@ -111,7 +176,6 @@ Template.bookingForm.events({
        let methodOfTransport = event.target.methodOfTransport.value;
        let newBooking = {severity:severity, methodOfTransport:methodOfTransport};
        Meteor.call('userInfo.addBookingData', loggedInUserId, newBooking);
-       console.log(loggedInUserId);
        FlowRouter.go("/userside");
    }
 });
@@ -142,7 +206,7 @@ Template.loginPage.events({
             }
         });
     }
-})
+});
 
 Template.registerPage.events({
     'submit form': function (event) {
@@ -154,6 +218,7 @@ Template.registerPage.events({
         if (radio == 1) { //Hospital
             let lineOnline = new Queue();
             let lineOffline = new Queue();
+            console.log(lineOffline);
             Meteor.call("userData.insert", emailVar, name, passwordVar, "hospital", function (error, result) {
                 Meteor.call("hospitalData.create", result, lineOnline, lineOffline);
             });
@@ -171,10 +236,10 @@ Template.registerPage.events({
 
 
 /// patient object
-function Patient(first, last, idNum, arrivalTime) {
-    this.firstName = first;
-    this.lastName = last;
-    this.idNum = idNum;
+function Patient(name, id, bookingDets, arrivalTime) {
+    this.name = name;
+    this.id = id;
+    this.bookingDetails = bookingDets;
     this.arrivalTime = arrivalTime;
 };
 

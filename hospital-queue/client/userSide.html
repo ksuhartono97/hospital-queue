@@ -1,5 +1,18 @@
 <template name = "userSide">
     <h1>User Side</h1>
+
+    <button id = "back">Back</button>
+    <button id = "createBooking">Create New Booking</button>
+    <div style = "clear: both;">
+        <nav>
+            <a href='#current-booking'><span class="label label-primary">Current Booking</span></a>
+            <a href='#management'><span class="label label-warning">Booking Management</span></a>
+            <a href='#personaldata'><span class="label label-danger">Account Information</span></a>
+        </nav>
+<div id='current-booking' class='content'>
+          <div class = "row">
+            <div class = "col-sm-12" align = "center">
+              <table class = "table table-hover">
     <div class = "row">
         <div class = "col-sm-6">
             <button id = "back" class="btn btn-default">Back</button>
@@ -47,4 +60,65 @@
             </div>
         </div>
     </div>
-</template>
+    <p> Suggestions for optimal time spent </p>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Hospital Name</th>
+                <th>Waiting + Travel Time</th>
+                <th>Address</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope = "row">1</th>
+                <td><a href = "http://www.ha.org.hk/visitor/ha_hosp_details.asp?Content_ID=101326&Lang=ENG">Tseung Kwan O Hospital</td></a>
+                <td>3 hours</td>
+                <td>No. 2 Po Ning Lane, Hang Hau, Tseung Kwan O</td>
+              </tr>
+              <tr>
+                <th scope = "row">2</th>
+                <td><a href = "http://www.ha.org.hk/visitor/ha_hosp_details.asp?Content_ID=100156&Lang=ENG">United Christian Hospital</td></a>
+                <td>4 hours</td>
+                <td>130 Hip Wo St, Kwun Tong</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id='management' class='content'>
+  <div class="container">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Hospital Visited</th>
+                        <th>Severity</th>
+                        <th>Time Taken</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope = "row">1</th>
+                        <td>Tseung Kwan O Hospital</td>
+                        <td>Semi-Urgent</td>
+                        <td>2 hours</td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+        <div id='personaldata' class='content'>
+          <div class="container" style="align-content: center">
+                          <p> Name: Thomas </p>
+                          <p> Email: thomasthedank@tomas.com</p>
+                          <p> Number of visits: 1 </p>
+                      </div>
+                    </div>
+                  </div>
+      </template>

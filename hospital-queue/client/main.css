@@ -31,6 +31,15 @@ div.display-wait-list-no{
     background-color: White;
 }
 
+#current-booking{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border: 5px solid #447AB2 ;
+}
+
 #fastPass{
     padding-top: 10px;
     padding-bottom: 10px;
@@ -39,6 +48,15 @@ div.display-wait-list-no{
 
     border: 5px solid #E7AF5F ;
     background-color: White;
+}
+
+#management{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border: 5px solid #E7AF5F ;
 }
 
 #virtualQueue{
@@ -51,6 +69,14 @@ div.display-wait-list-no{
     background-color: White;
 }
 
+#personaldata{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border: 5px solid #CA5C54 ;
+}
 
 .map-container {
     width: 800px;

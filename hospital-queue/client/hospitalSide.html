@@ -14,6 +14,10 @@
         <p style="font-size: xx-large">789</p>
     </div>
 
+    <div class = "display-wait-list-no">
+        <input type="submit" class="btn btn-default" value="Move the queue">
+    </div>
+
 
     <div style = "clear: both;">
         <nav>
@@ -23,6 +27,17 @@
         </nav>
 
         <div id='walk-in' class='content'>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <form id = "offQueueReg">
+                        <div class="col-xs-6"><input type="text" class="form-control" id="nameBox" placeholder="Enter Name">
+                        </div>
+                        <div class="col-xs-4"><input type="submit" class="btn btn-default" value="Register"></div>
+                    </form>
+                </div>
+            </div>
+
             <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -41,16 +56,7 @@
                 </tbody>
             </table>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-2"></div>
-                    <form id = "offQueueReg">
-                        <div class="col-xs-6"><input type="text" class="form-control" id="nameBox" placeholder="Enter Name">
-                        </div>
-                        <div class="col-xs-4"><input type="submit" class="btn btn-default" value="Register"></div>
-                    </form>
-                </div>
-            </div>
+
 
         </div>
 
@@ -76,6 +82,17 @@
         </div>
 
         <div id='virtualQueue' class='content'>
+
+
+            <div class="container" style="align-content: center">
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-6"><input type="name" class="form-control" id="nameBox" placeholder="Enter Name">
+                    </div>
+                    <div class="col-xs-4"><button type="confirm" class="btn btn-default">Confirm</button></div>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -104,15 +121,7 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
-                <div class="container" style="align-content: center">
-                    <div class="row">
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-6"><input type="name" class="form-control" id="nameBox" placeholder="Enter Name">
-                        </div>
-                        <div class="col-xs-4"><button type="confirm" class="btn btn-default">Confirm</button></div>
-                    </div>
-                </div>
-            </div>
     </div>
 </template>

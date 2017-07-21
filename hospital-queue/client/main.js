@@ -15,8 +15,7 @@ var virtualNum = new ReactiveVar(0);
 var walkinNum= new ReactiveVar(0);
 
 Meteor.startup(function() {
-    GoogleMaps.load({ key: 'AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc' });
-    //GoogleDistance.apiKey('AIzaSyBoX34mlKXuDH-GxofMGX3Uh-wnE4lk_Xc');
+    GoogleMaps.load({ key: 'REPLACE-KEY-HERE' }); //REPLACE KEY HERE
 });
 //Depends on type of user.
 var loggedInUserId = null;
